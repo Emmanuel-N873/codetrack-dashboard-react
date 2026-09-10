@@ -11,7 +11,6 @@ createRoot(document.getElementById('root')).render(
       <DashboardProvider>
         <App/>
       </DashboardProvider>
-      <App />
     </AuthProvider>
   </StrictMode>,
 )
