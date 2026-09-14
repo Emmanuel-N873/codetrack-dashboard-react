@@ -86,7 +86,7 @@ const SignUpPage = () => {
                         {!errors.password && <p className="mt-1.5 text-sm text-slate-500">Use at least 8 characters.</p>}
                     </AuthField>
                 </div>
-                <button className="h-13 w-full rounded-xl bg-[#16a34a] text-base font-semibold text-white shadow-[0_10px_20px_-12px_rgba(22,163,74,0.9)] transition hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" type="submit">Create account</button>
+                <button className="h-[52px] w-full rounded-xl bg-[#16a34a] text-base font-semibold text-white shadow-[0_10px_20px_-12px_rgba(22,163,74,0.9)] transition hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" type="submit">Create account</button>
                 <p className="text-sm leading-5 text-slate-500">By signing up you agree to our <a className="font-medium text-teal-600 hover:text-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600" href="#terms">Terms</a> and <a className="font-medium text-teal-600 hover:text-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600" href="#privacy">Privacy Policy.</a></p>
                 <p className="text-center text-sm text-slate-600">Already have an account? <Link className="font-semibold text-teal-600 hover:text-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600" to="/signin">Log in.</Link></p>
             </form>

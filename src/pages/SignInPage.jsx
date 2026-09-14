@@ -6,7 +6,7 @@ import PasswordField from "../components/auth/PasswordField.jsx";
 import SocialLoginButton from "../components/auth/SocialLoginButton.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 
-const initialValues = { email: "", password: "", remember: false };
+const initialValues = { email: "", password: "", remember: true };
 
 const SignInPage = () => {
     const { signIn } = useContext(AuthContext);
@@ -72,12 +72,12 @@ const SignInPage = () => {
                 </div>
                 <div className="flex items-center justify-between gap-3 text-sm">
                     <label className="flex cursor-pointer items-center gap-2 text-slate-600" htmlFor="remember">
-                        <input checked={form.remember} className="size-4 accent-emerald-600" id="remember" name="remember" onChange={updateField} type="checkbox" />
+                        <input checked={form.remember} className="size-[18px] rounded accent-emerald-600" id="remember" name="remember" onChange={updateField} type="checkbox" />
                         Remember me
                     </label>
                     <a className="font-medium text-teal-600 hover:text-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600" href="mailto:support@codetrack.test">Forgot password?</a>
                 </div>
-                <button className="h-13 w-full rounded-xl bg-[#16a34a] text-base font-semibold text-white shadow-[0_10px_20px_-12px_rgba(22,163,74,0.9)] transition hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" type="submit">Log in</button>
+                <button className="h-[52px] w-full rounded-xl bg-[#16a34a] text-base font-semibold text-white shadow-[0_10px_20px_-12px_rgba(22,163,74,0.9)] transition hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2" type="submit">Log in</button>
                 <p className="pt-0.5 text-center text-sm text-slate-600">New here? <Link className="font-semibold text-teal-600 hover:text-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600" to="/signup">Create an account.</Link></p>
             </form>
         </AuthLayout>
