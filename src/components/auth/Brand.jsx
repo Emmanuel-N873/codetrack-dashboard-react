@@ -1,5 +1,9 @@
-const Brand = ({ className = "" }) => (
-    <div className={`flex items-center gap-2 font-semibold text-white ${className}`}>
+const Brand = ({ className = "", variant = "dark" }) => {
+  const textColor = variant === "dark" ? "text-white" : "text-gray-900";
+  const accentColor = variant === "dark" ? "text-emerald-400" : "text-emerald-600";
+
+  return (
+    <div className={`flex items-center gap-2 font-semibold ${textColor} ${className}`}>
         <span className="grid grid-cols-3 gap-0.5" aria-hidden="true">
             {Array.from({ length: 9 }, (_, index) => (
                 <span
@@ -8,8 +12,9 @@ const Brand = ({ className = "" }) => (
                 />
             ))}
         </span>
-        <span>Code<span className="text-emerald-400">Track</span></span>
+        <span>Code<span className={accentColor}>Track</span></span>
     </div>
-);
+  );
+};
 
 export default Brand;
