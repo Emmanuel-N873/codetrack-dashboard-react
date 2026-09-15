@@ -1,4 +1,18 @@
+import PropTypes from 'prop-types';
+
 const Brand = ({ className = "", variant = "dark" }) => {
+  if (variant === 'light') {
+    return (
+      <img
+        src="/images/Dashboard Logo 1.png"
+        alt="CodeTrack"
+        width="131"
+        height="26"
+        className={`h-[22px] w-auto object-contain sm:h-[26px] ${className}`}
+      />
+    );
+  }
+
   const textColor = variant === "dark" ? "text-white" : "text-gray-900";
   const accentColor = variant === "dark" ? "text-emerald-400" : "text-emerald-600";
 
@@ -15,6 +29,11 @@ const Brand = ({ className = "", variant = "dark" }) => {
         <span>Code<span className={accentColor}>Track</span></span>
     </div>
   );
+};
+
+Brand.propTypes = {
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['dark', 'light']),
 };
 
 export default Brand;

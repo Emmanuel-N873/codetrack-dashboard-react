@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
 
 const MetricCard = ({ icon: Icon, label, value, unit, helperText }) => {
+  const accent = label === 'Current streak' ? 'text-orange-500' : label === 'Hours this week' ? 'text-teal-600' : 'text-green-600';
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm hover:shadow-md transition-shadow">
+    <div className="min-h-36 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md md:min-h-0 md:p-6">
       {/* Icon and Label */}
       <div className="flex items-center gap-2 mb-3 md:mb-4">
-        {Icon && <Icon size={18} className="md:w-5 md:h-5 text-gray-500" />}
-        <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">{label}</span>
+        {Icon && <Icon size={19} className={`${accent} md:h-5 md:w-5`} />}
+        <span className="text-sm font-medium text-gray-500">{label}</span>
       </div>
 
       {/* Value */}
       <div className="mb-3 md:mb-4">
-        <div className="text-3xl md:text-4xl font-bold text-gray-900">
+        <div className="font-mono text-5xl font-semibold tracking-tight text-gray-950 md:text-5xl">
           {value}
-          {unit && <span className="text-lg md:text-xl font-normal text-gray-500 ml-1">{unit}</span>}
+          {unit && <span className={`ml-1 font-sans text-xl font-medium ${accent}`}>{unit}</span>}
         </div>
       </div>
 

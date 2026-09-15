@@ -1,21 +1,22 @@
-import { Home, BookOpen, Target, Zap, BarChart3 } from 'lucide-react';
+import { LayoutGrid, SquarePen, Target, GraduationCap, BarChart3 } from 'lucide-react';
 
 const BottomNavigation = () => {
   const navItems = [
-    { icon: Home, label: 'Dashboard', href: '#', active: true },
-    { icon: BookOpen, label: 'Log', href: '#', active: false },
-    { icon: Target, label: 'Goals', href: '#', active: false },
-    { icon: Zap, label: 'Skills', href: '#', active: false },
-    { icon: BarChart3, label: 'Stats', href: '#', active: false },
+    { icon: LayoutGrid, label: 'Dashboard', href: '#top', active: true },
+    { icon: SquarePen, label: 'Log', href: '#recent-log', active: false },
+    { icon: Target, label: 'Goals', href: '#goals', active: false },
+    { icon: GraduationCap, label: 'Skills', href: '#heatmap', active: false },
+    { icon: BarChart3, label: 'Stats', href: '#activity', active: false },
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-0">
-      <div className="flex items-center justify-around h-16">
+    <nav aria-label="Primary navigation" className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
+      <div className="flex h-16 items-center justify-around">
         {navItems.map((item) => (
           <a
             key={item.label}
             href={item.href}
+            aria-current={item.active ? 'page' : undefined}
             className={`flex flex-col items-center justify-center gap-1 flex-1 h-full transition-colors ${
               item.active
                 ? 'text-green-600'

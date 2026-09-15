@@ -1,57 +1,34 @@
-const Goals = () => {
-  const goals = [
-    {
-      id: 1,
-      title: 'Learn React',
-      current: 12,
-      target: 28,
-      unit: 'hours',
-      color: 'bg-green-500',
-    },
-    {
-      id: 2,
-      title: 'DS&A topics mastered',
-      current: 7,
-      target: 10,
-      unit: 'topics',
-      color: 'bg-teal-600',
-    },
-    {
-      id: 3,
-      title: '30-day commit streak',
-      current: 12,
-      target: 30,
-      unit: 'days',
-      color: 'bg-yellow-500',
-    },
-  ];
+import PropTypes from 'prop-types';
+
+const Goals = ({ goals }) => {
+  const colors = ['bg-green-600', 'bg-teal-600', 'bg-amber-500'];
 
   const getProgressPercentage = (current, target) => {
     return (current / target) * 100;
   };
 
   return (
-    <section className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
-      <h2 className="text-base md:text-lg font-semibold text-gray-900 mb-4 md:mb-6">Goals</h2>
+    <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <h2 className="border-b border-gray-200 px-5 py-4 text-base font-semibold text-gray-900 md:px-6">Goals</h2>
 
-      <div className="space-y-4 md:space-y-6">
-        {goals.map((goal) => {
-          const percentage = getProgressPercentage(goal.current, goal.target);
+      <div className="space-y-5 px-5 py-5 md:px-6">
+        {goals.map((goal, index) => {
+          const percentage = getProgressPercentage(goal.current_value, goal.target_value);
 
           return (
             <div key={goal.id}>
               {/* Goal Title and Ratio */}
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-medium text-gray-900">{goal.title}</h3>
-                <span className="text-sm font-medium text-gray-600">
-                  {goal.current} of {goal.target} {goal.unit}
+                <span className="hidden font-mono text-xs font-medium text-gray-500 md:inline">
+                  {goal.current_value} of {goal.target_value} {goal.unit}
                 </span>
               </div>
 
               {/* Progress Bar */}
               <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                 <div
-                  className={`h-full ${goal.color} transition-all duration-300`}
+                  className={`h-full ${colors[index % colors.length]} transition-all duration-300`}
                   style={{ width: `${Math.min(percentage, 100)}%` }}
                 />
               </div>
@@ -62,5 +39,7 @@ const Goals = () => {
     </section>
   );
 };
+
+Goals.propTypes = { goals: PropTypes.arrayOf(PropTypes.object).isRequired };
 
 export default Goals;

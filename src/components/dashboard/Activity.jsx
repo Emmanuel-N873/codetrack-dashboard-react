@@ -1,46 +1,39 @@
-const Activity = () => {
-  const activityData = [
-    { day: 'Wed', hours: 2.5 },
-    { day: 'Thu', hours: 0.5 },
-    { day: 'Fri', hours: 1 },
-    { day: 'Sat', hours: 3.5 },
-    { day: 'Sun', hours: 1.5 },
-    { day: 'Mon', hours: 2 },
-    { day: 'Tue', hours: 4.5 },
-    { day: 'Wed', hours: 2.5 },
-    { day: 'Thu', hours: 3 },
-    { day: 'Fri', hours: 0.75 },
-    { day: 'Sat', hours: 2.5 },
-    { day: 'Sun', hours: 1.25 },
-    { day: 'Mon', hours: 3.25 },
-    { day: 'Tue', hours: 2.75 },
-  ];
+import PropTypes from 'prop-types';
+import { getDailyMinutes } from '../../utils/dashboardMetrics';
+
+const Activity = ({ logs, asOf }) => {
+  const activityData = getDailyMinutes(logs, asOf, 14).map((entry) => ({
+    ...entry,
+    day: new Date(`${entry.date}T00:00:00Z`).toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }),
+    hours: entry.minutes / 60,
+  }));
 
   const maxHours = Math.max(...activityData.map((d) => d.hours));
 
   return (
-    <section className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
+    <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-0 mb-4 md:mb-6">
+      <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 md:px-6">
         <h2 className="text-base md:text-lg font-semibold text-gray-900">Activity</h2>
-        <span className="text-xs md:text-sm text-gray-600 font-medium">Last 14 days</span>
+        <span className="hidden font-mono text-xs text-gray-500 md:inline">Last 14 days</span>
       </div>
 
       {/* Bar Chart */}
-      <div className="flex items-end justify-between gap-1 md:gap-1.5 h-32 md:h-40">
+      <div className="mx-5 my-5 flex h-36 flex-1 items-end justify-between gap-1 md:mx-6 md:min-h-32 md:gap-1.5">
         {activityData.map((data, index) => {
           const heightPercentage = (data.hours / maxHours) * 100;
 
           return (
             <div
               key={index}
-              className="flex-1 flex flex-col items-center justify-end gap-2 group cursor-pointer h-full"
+              className="group flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2"
             >
               {/* Bar */}
-              <div
-                className="w-full bg-green-500 hover:bg-green-600 rounded-t transition-all duration-200 group-hover:shadow-lg"
+              <button type="button"
+                className="w-full rounded-t bg-green-600 transition-all duration-200 hover:bg-green-700 focus-visible:outline-2 focus-visible:outline-green-800"
                 style={{ height: `${Math.max(heightPercentage, 5)}%` }}
                 title={`${data.day}: ${data.hours} hrs`}
+                aria-label={`${data.date}: ${data.hours.toFixed(1)} hours logged`}
               />
 
               {/* Day Label */}
@@ -53,11 +46,13 @@ const Activity = () => {
       </div>
 
       {/* Legend */}
-      <p className="text-xs text-gray-600 text-center mt-4 md:mt-6">
+      <p className="hidden pb-4 text-center text-xs text-gray-600 md:block">
         Height represents hours logged per day
       </p>
     </section>
   );
 };
+
+Activity.propTypes = { logs: PropTypes.arrayOf(PropTypes.object).isRequired, asOf: PropTypes.string.isRequired };
 
 export default Activity;

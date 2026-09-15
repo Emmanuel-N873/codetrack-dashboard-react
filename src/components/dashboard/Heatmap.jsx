@@ -1,55 +1,44 @@
-import { TrendingUp } from 'lucide-react';
+import PropTypes from 'prop-types';
+import { getDailyMinutes } from '../../utils/dashboardMetrics';
 
-const Heatmap = () => {
-  // Generate a GitHub-style contribution heatmap
-  const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const Heatmap = ({ logs, asOf }) => {
+  const dailyData = getDailyMinutes(logs, asOf, 371);
+  const weeks = Array.from({ length: 53 }, (_, week) => dailyData.slice(week * 7, week * 7 + 7));
+  const months = weeks.map((week, index) => {
+    const label = new Date(`${week[0].date}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' });
+    return index === 0 || label !== new Date(`${weeks[index - 1][0].date}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }) ? label : '';
+  });
 
-  // Generate random contribution data for demo
-  const generateHeatmapData = () => {
-    const data = [];
-    for (let i = 0; i < 53; i++) { // 53 weeks
-      const week = [];
-      for (let j = 0; j < 7; j++) { // 7 days
-        const intensity = Math.floor(Math.random() * 5); // 0-4 intensity levels
-        week.push(intensity);
-      }
-      data.push(week);
-    }
-    return data;
-  };
-
-  const heatmapData = generateHeatmapData();
-
-  const getColor = (intensity) => {
+  const getColor = (minutes) => {
+    const intensity = minutes === 0 ? 0 : minutes < 30 ? 1 : minutes < 60 ? 2 : minutes < 90 ? 3 : 4;
     const colors = [
-      'bg-gray-100',
-      'bg-green-200',
-      'bg-green-300',
-      'bg-green-500',
-      'bg-green-700',
+      'bg-[#ebedf0]',
+      'bg-[#bbf7d0]',
+      'bg-[#86efac]',
+      'bg-[#22c55e]',
+      'bg-[#15803d]',
     ];
     return colors[intensity];
   };
 
   return (
-    <section className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 shadow-sm">
+    <section className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-0 mb-6">
+      <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 md:px-6">
         <h2 className="text-base md:text-lg font-semibold text-gray-900">Your contribution heatmap</h2>
-        <div className="flex items-center gap-2 text-xs md:text-sm text-green-600 font-medium">
-          <TrendingUp size={16} />
-          <span>On track</span>
+        <div className="flex items-center gap-1.5 rounded-full bg-[#dcfce7] px-3 py-1 text-xs font-medium text-[#15803d]">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#16a34a]" aria-hidden="true" /><span>On track</span>
         </div>
       </div>
 
       {/* Heatmap Grid - Responsive with horizontal scroll */}
-      <div className="overflow-x-auto">
-        <div className="inline-block min-w-max px-2 md:px-0">
+      <div className="px-5 py-5 md:px-6">
+        <div className="overflow-x-auto pb-2 [scrollbar-width:thin]">
+        <div className="inline-block min-w-max">
           {/* Month Labels */}
-          <div className="flex gap-1 mb-2 ml-12">
-            {months.map((month) => (
-              <div key={month} className="w-12 text-xs text-gray-600 text-center font-medium">
+          <div className="mb-2 ml-7 flex gap-1">
+            {months.map((month, index) => (
+              <div key={index} className={`w-3 text-[10px] text-gray-500 ${index < 27 ? 'hidden md:block' : 'block'}`}>
                 {month}
               </div>
             ))}
@@ -58,7 +47,7 @@ const Heatmap = () => {
           {/* Heatmap */}
           <div className="flex gap-1">
             {/* Day Labels */}
-            <div className="flex flex-col gap-1 mr-2">
+            <div className="mr-2 flex flex-col gap-1">
               {['', 'Tue', '', 'Thu', '', 'Sat', ''].map((day, i) => (
                 <div key={i} className="h-3 flex items-center">
                   {day && <span className="text-xs text-gray-600 font-medium">{day}</span>}
@@ -68,14 +57,10 @@ const Heatmap = () => {
 
             {/* Heatmap Grid */}
             <div className="flex gap-1">
-              {heatmapData.map((week, weekIdx) => (
-                <div key={weekIdx} className="flex flex-col gap-1">
-                  {week.map((intensity, dayIdx) => (
-                    <div
-                      key={`${weekIdx}-${dayIdx}`}
-                      className={`w-3 h-3 rounded-sm ${getColor(intensity)} hover:ring-2 hover:ring-green-600 cursor-pointer transition-all`}
-                      title={`Intensity: ${intensity}`}
-                    />
+              {weeks.map((week, weekIdx) => (
+                <div key={weekIdx} className={`flex-col gap-1 ${weekIdx < 27 ? 'hidden md:flex' : 'flex'}`}>
+                  {week.map((day) => (
+                    <button type="button" key={day.date} className={`h-3 w-3 rounded-sm ${getColor(day.minutes)} transition-all hover:ring-2 hover:ring-[#16a34a] focus-visible:outline-2 focus-visible:outline-[#15803d]`} aria-label={`${day.date}: ${day.minutes} minutes logged`} title={`${day.date}: ${day.minutes} minutes`} />
                   ))}
                 </div>
               ))}
@@ -86,7 +71,7 @@ const Heatmap = () => {
           <div className="mt-6 flex items-center gap-3">
             <span className="text-xs text-gray-600 font-medium">Less</span>
             <div className="flex gap-1">
-              {['bg-gray-100', 'bg-green-200', 'bg-green-300', 'bg-green-500', 'bg-green-700'].map((color, i) => (
+              {['bg-[#ebedf0]', 'bg-[#bbf7d0]', 'bg-[#86efac]', 'bg-[#22c55e]', 'bg-[#15803d]'].map((color, i) => (
                 <div key={i} className={`w-3 h-3 rounded-sm ${color}`} />
               ))}
             </div>
@@ -94,13 +79,16 @@ const Heatmap = () => {
           </div>
 
           {/* Helper Text */}
-          <p className="text-xs text-gray-600 mt-4">
-            Hover any square to see that day's entries. Darker green means more logged.
+          </div>
+          <p className="mt-3 text-xs text-gray-500">
+            Hover or focus any square to see that day&apos;s entries. Darker green means more logged.
           </p>
         </div>
       </div>
     </section>
   );
 };
+
+Heatmap.propTypes = { logs: PropTypes.arrayOf(PropTypes.object).isRequired, asOf: PropTypes.string.isRequired };
 
 export default Heatmap;
