@@ -1,13 +1,13 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-const PasswordField = ({ error, id = "password", onChange, placeholder, value }) => {
+const PasswordField = ({ describedBy, error, id = "password", onChange, placeholder, value }) => {
     const [isVisible, setIsVisible] = useState(false);
 
     return (
         <div className="relative">
             <input
-                aria-describedby={error ? `${id}-error` : undefined}
+                aria-describedby={[describedBy, error ? `${id}-error` : null].filter(Boolean).join(" ") || undefined}
                 aria-invalid={Boolean(error)}
                 className={`h-11 w-full rounded-xl border bg-white px-3 pr-14 text-base text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 ${error ? "border-red-500" : "border-slate-200"}`}
                 id={id}
@@ -30,6 +30,7 @@ const PasswordField = ({ error, id = "password", onChange, placeholder, value })
 };
 
 PasswordField.propTypes = {
+    describedBy: PropTypes.string,
     error: PropTypes.string,
     id: PropTypes.string,
     onChange: PropTypes.func.isRequired,
