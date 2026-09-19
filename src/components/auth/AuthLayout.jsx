@@ -12,8 +12,8 @@ const AuthLayout = ({ children, description, mobileMessage, title, variant }) =>
                     <span className="font-mono text-xs tracking-wide text-slate-400">{mobileMessage}</span>
                 </header>
 
-                <section className="flex min-h-[calc(100vh-90px)] items-center justify-center px-6 py-7 sm:px-10 lg:order-1 lg:min-h-screen lg:px-0 lg:py-0">
-                    <div className="w-full max-w-100 lg:mx-auto">
+                <section className="flex min-h-[calc(100vh-90px)] items-start justify-center px-6 py-7 sm:px-10 lg:order-1 lg:min-h-screen lg:px-0 lg:py-0">
+                    <div className="w-full max-w-[400px] lg:mx-auto lg:mt-12">
                         <h1 className="text-[28px] font-bold leading-tight tracking-tight text-slate-950">{title}</h1>
                         <p className="mt-1 text-[15px] text-slate-500">{description}</p>
                         {children}
