@@ -11,7 +11,7 @@ const Activity = ({ logs, asOf }) => {
   const maxHours = Math.max(1, ...activityData.map((d) => d.hours));
 
   return (
-    <section className="flex min-h-[240px] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm md:h-full md:min-h-0">
+    <section className="flex min-h-60 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm md:h-full md:min-h-0">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 md:px-6">
         <h2 className="text-base md:text-lg font-semibold text-gray-900">Activity</h2>
