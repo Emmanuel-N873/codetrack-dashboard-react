@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 const RecentLog = ({ logs, asOf, onAdd }) => {
   const asOfDate = new Date(asOf);
+  const asOfDay = asOfDate.toISOString().slice(0, 10);
+  const hasLogToday = logs.some((entry) => new Date(entry.logged_at).toISOString().slice(0, 10) === asOfDay);
   const logEntries = [...logs].sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at)).slice(0, 4);
   const formatTimestamp = (value) => {
     const date = new Date(value);
@@ -32,13 +34,13 @@ const RecentLog = ({ logs, asOf, onAdd }) => {
       {/* Log Items */}
       <div className="px-5 py-5 md:px-6">
         {/* Empty State Alert */}
-        <button type="button" onClick={onAdd} className="mb-4 flex w-full items-center gap-3 rounded-lg border border-dashed border-green-500 bg-green-50 p-4 text-left hover:bg-green-100 focus-visible:outline-2 focus-visible:outline-green-600">
+        {!hasLogToday && <button type="button" onClick={onAdd} className="mb-4 flex w-full items-center gap-3 rounded-lg border border-dashed border-green-500 bg-green-50 p-4 text-left hover:bg-green-100 focus-visible:outline-2 focus-visible:outline-green-600">
           <Zap size={18} className="md:w-5 md:h-5 text-green-600 shrink-0 mt-0.5" />
           <div>
             <p className="font-medium text-xs md:text-sm text-green-900">Nothing logged yet today.</p>
             <p className="mt-0.5 text-xs text-green-700">Log your first 20 minutes →</p>
           </div>
-        </button>
+        </button>}
 
         {/* Log Entries */}
         {logEntries.map((entry) => (

@@ -16,6 +16,11 @@ export function getDashboardMetrics(logs, asOfValue) {
     const date = new Date(log.logged_at);
     return date >= weekStart && date <= asOf ? total + log.duration_minutes : total;
   }, 0);
+  const previousWeekStart = new Date(weekStart.getTime() - (7 * DAY_MS));
+  const previousWeekMinutes = logs.reduce((total, log) => {
+    const date = new Date(log.logged_at);
+    return date >= previousWeekStart && date < weekStart ? total + log.duration_minutes : total;
+  }, 0);
 
   let streak = 0;
   let cursor = new Date(asOfDay);
@@ -25,10 +30,22 @@ export function getDashboardMetrics(logs, asOfValue) {
     cursor = new Date(cursor.getTime() - DAY_MS);
   }
 
+  let personalBest = 0;
+  let runningStreak = 0;
+  const sortedDays = [...loggedDays].sort();
+  sortedDays.forEach((day, index) => {
+    const previousDay = index > 0 ? new Date(`${sortedDays[index - 1]}T00:00:00Z`) : null;
+    const currentDay = new Date(`${day}T00:00:00Z`);
+    runningStreak = previousDay && currentDay - previousDay === DAY_MS ? runningStreak + 1 : 1;
+    personalBest = Math.max(personalBest, runningStreak);
+  });
+
   return {
     streak,
+    personalBest,
     daysThisMonth,
     hoursThisWeek: (weekMinutes / 60).toFixed(1),
+    weeklyDeltaHours: ((weekMinutes - previousWeekMinutes) / 60).toFixed(1),
     daysElapsedInMonth: asOf.getUTCDate(),
   };
 }

@@ -9,16 +9,25 @@ import RecentLog from '../components/dashboard/RecentLog';
 import Goals from '../components/dashboard/Goals';
 import Activity from '../components/dashboard/Activity';
 import { useDashboard } from '../hooks/useDashboard';
+import { useAuth } from '../hooks/useAuth';
 import { getDashboardMetrics } from '../utils/dashboardMetrics';
 
 const DashBoardPage = () => {
   const { profiles, learningLogs, goals, dashboardAsOf, addLearningLog } = useDashboard();
+  const { currentUser, signOut } = useAuth();
   const [showLogForm, setShowLogForm] = useState(false);
   const [form, setForm] = useState({ title: '', tag: 'react', duration: '20' });
-  const profile = profiles[0];
+  const profile = profiles.find((item) => item.id === currentUser.id) ?? {
+    id: currentUser.id,
+    display_name: currentUser.display_name,
+    plan: currentUser.plan,
+    time_zone: currentUser.time_zone,
+  };
+  const profileLogs = learningLogs.filter((log) => log.profile_id === profile.id);
+  const profileGoals = goals.filter((goal) => goal.profile_id === profile.id);
   const metrics = useMemo(
-    () => getDashboardMetrics(learningLogs, dashboardAsOf),
-    [dashboardAsOf, learningLogs],
+    () => getDashboardMetrics(profileLogs, dashboardAsOf),
+    [dashboardAsOf, profileLogs],
   );
 
   const submitLog = (event) => {
@@ -37,7 +46,7 @@ const DashBoardPage = () => {
   return (
     <div className="min-h-screen bg-[#f4f7f5]">
       {/* Sidebar - Hidden on mobile */}
-      <DashboardSidebar />
+      <DashboardSidebar name={profile.display_name} plan={profile.plan} onSignOut={signOut} />
 
       {/* Main Content */}
       <main id="top" className="w-full pb-24 md:ml-60 md:w-[calc(100%-15rem)] md:pb-8">
@@ -57,7 +66,7 @@ const DashBoardPage = () => {
               label="Current streak"
               value={metrics.streak}
               unit="days"
-              helperText="Personal best: 40 days"
+              helperText={`Personal best: ${metrics.personalBest} days`}
             />
             <MetricCard
               icon={Calendar}
@@ -70,26 +79,26 @@ const DashBoardPage = () => {
               label="Hours this week"
               value={metrics.hoursThisWeek}
               unit="hrs"
-              helperText="+2.0 vs last week"
+              helperText={`${Number(metrics.weeklyDeltaHours) >= 0 ? '+' : ''}${metrics.weeklyDeltaHours} vs last week`}
             />
           </section>
 
           {/* Heatmap Section */}
           <section id="heatmap" className="scroll-mt-24">
-            <Heatmap logs={learningLogs} asOf={dashboardAsOf} />
+            <Heatmap logs={profileLogs} asOf={dashboardAsOf} />
           </section>
 
           {/* Bottom Split Layout - 1 column on mobile, 3-column on desktop */}
           <section className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(20rem,5fr)] lg:items-stretch">
             {/* Recent Log - takes full width on mobile, 2 columns on desktop */}
             <div id="recent-log" className="h-full scroll-mt-24">
-              <RecentLog logs={learningLogs} asOf={dashboardAsOf} onAdd={() => setShowLogForm(true)} />
+              <RecentLog logs={profileLogs} asOf={dashboardAsOf} onAdd={() => setShowLogForm(true)} />
             </div>
 
             {/* Goals and Activity - takes full width on mobile, 1 column on desktop, stacked */}
             <div className="grid h-full grid-rows-[auto_1fr] gap-4 md:gap-6">
-              <div id="goals" className="scroll-mt-24"><Goals goals={goals} /></div>
-              <div id="activity" className="min-h-0 scroll-mt-24"><Activity logs={learningLogs} asOf={dashboardAsOf} /></div>
+              <div id="goals" className="scroll-mt-24"><Goals goals={profileGoals} /></div>
+              <div id="activity" className="min-h-0 scroll-mt-24"><Activity logs={profileLogs} asOf={dashboardAsOf} /></div>
             </div>
           </section>
         </div>

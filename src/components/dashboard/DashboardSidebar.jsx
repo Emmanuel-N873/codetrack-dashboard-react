@@ -1,14 +1,14 @@
-import { LayoutGrid, SquarePen, Target, GraduationCap, BarChart3, Settings } from 'lucide-react';
+import { LayoutGrid, SquarePen, Target, GraduationCap, BarChart3, LogOut } from 'lucide-react';
+import PropTypes from 'prop-types';
 import Brand from '../auth/Brand.jsx';
 
-const DashboardSidebar = () => {
+const DashboardSidebar = ({ name, onSignOut, plan }) => {
   const navItems = [
     { icon: LayoutGrid, label: 'Dashboard', href: '#top', active: true },
     { icon: SquarePen, label: 'Log', href: '#recent-log', active: false },
     { icon: Target, label: 'Goals', href: '#goals', active: false },
     { icon: GraduationCap, label: 'Skills', href: '#heatmap', active: false },
     { icon: BarChart3, label: 'Stats', href: '#activity', active: false },
-    { icon: Settings, label: 'Settings', href: '#', active: false },
   ];
 
   return (
@@ -38,16 +38,25 @@ const DashboardSidebar = () => {
       </nav>
 
       {/* User Profile Card */}
-      <div className="border-t border-gray-200 px-4 py-4">
+      <div className="mt-auto border-t border-gray-200 px-4 py-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-bold text-gray-600">
-            AR
+            {name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase()}
           </div>
-          <div><h3 className="text-sm font-semibold text-gray-900">Alex Rivera</h3><p className="mt-0.5 text-xs text-gray-500">Free plan</p></div>
+          <div className="min-w-0 flex-1"><h3 className="truncate text-sm font-semibold text-gray-900">{name}</h3><p className="mt-0.5 text-xs capitalize text-gray-500">{plan} plan</p></div>
+          <button type="button" onClick={onSignOut} className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-red-600 focus-visible:outline-2 focus-visible:outline-red-600" aria-label="Sign out" title="Sign out">
+            <LogOut size={18} />
+          </button>
         </div>
       </div>
     </aside>
   );
+};
+
+DashboardSidebar.propTypes = {
+  name: PropTypes.string.isRequired,
+  onSignOut: PropTypes.func.isRequired,
+  plan: PropTypes.string.isRequired,
 };
 
 export default DashboardSidebar;

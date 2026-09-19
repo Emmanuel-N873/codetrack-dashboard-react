@@ -1,9 +1,16 @@
 import { Flame, Plus } from 'lucide-react';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import Brand from '../auth/Brand.jsx';
 
 const DashboardHeader = ({ name, streak, onLog }) => {
-  const today = new Date();
+  const [today, setToday] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setToday(new Date()), 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
     weekday: 'long',
     month: 'short',
