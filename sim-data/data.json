@@ -7,7 +7,7 @@
       "id": "00000000-0000-0000-0000-000000000001",
       "display_name": "Alex Rivera",
       "email": "alex@codetrack.test",
-      "password": "password123",
+      "password_hash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
       "plan": "free",
       "time_zone": "UTC"
     }
