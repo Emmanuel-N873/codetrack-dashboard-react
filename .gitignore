@@ -26,3 +26,4 @@ dist-ssr
 # Local AI agent skills and their generated lockfile
 .agents/skills/
 skills-lock.json
+package-lock.json
