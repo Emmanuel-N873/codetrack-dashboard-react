@@ -8,10 +8,10 @@ const Activity = ({ logs, asOf }) => {
     hours: entry.minutes / 60,
   }));
 
-  const maxHours = Math.max(...activityData.map((d) => d.hours));
+  const maxHours = Math.max(1, ...activityData.map((d) => d.hours));
 
   return (
-    <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+    <section className="flex min-h-[240px] flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm md:h-full md:min-h-0">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 md:px-6">
         <h2 className="text-base md:text-lg font-semibold text-gray-900">Activity</h2>
@@ -19,7 +19,7 @@ const Activity = ({ logs, asOf }) => {
       </div>
 
       {/* Bar Chart */}
-      <div className="mx-5 my-5 flex h-36 flex-1 items-end justify-between gap-1 md:mx-6 md:min-h-32 md:gap-1.5">
+      <div className="mx-5 my-5 flex h-36 flex-none items-end justify-between gap-1 md:mx-6 md:h-auto md:min-h-32 md:flex-1 md:gap-1.5">
         {activityData.map((data, index) => {
           const heightPercentage = (data.hours / maxHours) * 100;
 
@@ -30,8 +30,8 @@ const Activity = ({ logs, asOf }) => {
             >
               {/* Bar */}
               <button type="button"
-                className="w-full rounded-t bg-green-600 transition-all duration-200 hover:bg-green-700 focus-visible:outline-2 focus-visible:outline-green-800"
-                style={{ height: `${Math.max(heightPercentage, 5)}%` }}
+                className={`w-full rounded-t transition-all duration-200 focus-visible:outline-2 focus-visible:outline-green-800 ${data.hours === 0 ? 'bg-gray-200' : 'bg-green-600 hover:bg-green-700'}`}
+                style={{ height: data.hours === 0 ? '2px' : `${Math.max(heightPercentage, 8)}%` }}
                 title={`${data.day}: ${data.hours} hrs`}
                 aria-label={`${data.date}: ${data.hours.toFixed(1)} hours logged`}
               />

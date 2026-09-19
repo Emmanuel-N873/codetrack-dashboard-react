@@ -14,7 +14,7 @@ const MetricCard = ({ icon: Icon, label, value, unit, helperText }) => {
       <div className="mb-3 md:mb-4">
         <div className="font-mono text-5xl font-semibold tracking-tight text-gray-950 md:text-5xl">
           {value}
-          {unit && <span className={`ml-1 font-sans text-xl font-medium ${accent}`}>{unit}</span>}
+          {unit && <span className={`ml-2 font-mono text-xl font-normal tracking-wide ${accent}`}>{unit}</span>}
         </div>
       </div>
 

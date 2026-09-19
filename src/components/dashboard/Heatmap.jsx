@@ -34,56 +34,56 @@ const Heatmap = ({ logs, asOf }) => {
       {/* Heatmap Grid - Responsive with horizontal scroll */}
       <div className="px-5 py-5 md:px-6">
         <div className="overflow-x-auto pb-2 [scrollbar-width:thin]">
-        <div className="inline-block min-w-max">
-          {/* Month Labels */}
-          <div className="mb-2 ml-7 flex gap-1">
-            {months.map((month, index) => (
-              <div key={index} className={`w-3 text-[10px] text-gray-500 ${index < 27 ? 'hidden md:block' : 'block'}`}>
-                {month}
+          <div className="w-full min-w-[460px] md:min-w-0">
+            {/* Month Labels */}
+            <div className="mb-2 ml-9 grid grid-cols-[repeat(26,minmax(0,1fr))] gap-1 md:grid-cols-[repeat(53,minmax(0,1fr))]">
+              {months.map((month, index) => (
+                <div key={index} className={`min-w-0 text-[10px] text-gray-500 ${index < 27 ? 'hidden md:block' : 'block'}`}>
+                  {month}
+                </div>
+              ))}
+            </div>
+
+            {/* Heatmap */}
+            <div className="flex gap-1">
+              {/* Day Labels */}
+              <div className="mr-2 flex flex-col gap-1">
+                {['', 'Tue', '', 'Thu', '', 'Sat', ''].map((day, i) => (
+                  <div key={i} className="flex h-3 items-center">
+                    {day && <span className="text-xs font-medium text-gray-600">{day}</span>}
+                  </div>
+                ))}
               </div>
+
+              {/* Heatmap Grid */}
+              <div className="grid min-w-0 flex-1 grid-cols-[repeat(26,minmax(0,1fr))] gap-1 md:grid-cols-[repeat(53,minmax(0,1fr))]">
+                {weeks.map((week, weekIdx) => (
+                  <div key={weekIdx} className={`min-w-0 flex-col gap-1 ${weekIdx < 27 ? 'hidden md:flex' : 'flex'}`}>
+                    {week.map((day) => (
+                      <button type="button" key={day.date} className={`aspect-square w-full min-w-3 rounded-sm ${getColor(day.minutes)} transition-all hover:ring-2 hover:ring-[#16a34a] focus-visible:outline-2 focus-visible:outline-[#15803d]`} aria-label={`${day.date}: ${day.minutes} minutes logged`} title={`${day.date}: ${day.minutes} minutes`} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="mt-4 flex items-center gap-3">
+          <span className="text-xs font-medium text-gray-600">Less</span>
+          <div className="flex gap-1" aria-hidden="true">
+            {['bg-[#ebedf0]', 'bg-[#bbf7d0]', 'bg-[#86efac]', 'bg-[#22c55e]', 'bg-[#15803d]'].map((color, i) => (
+              <div key={i} className={`h-3 w-3 rounded-sm ${color}`} />
             ))}
           </div>
-
-          {/* Heatmap */}
-          <div className="flex gap-1">
-            {/* Day Labels */}
-            <div className="mr-2 flex flex-col gap-1">
-              {['', 'Tue', '', 'Thu', '', 'Sat', ''].map((day, i) => (
-                <div key={i} className="h-3 flex items-center">
-                  {day && <span className="text-xs text-gray-600 font-medium">{day}</span>}
-                </div>
-              ))}
-            </div>
-
-            {/* Heatmap Grid */}
-            <div className="flex gap-1">
-              {weeks.map((week, weekIdx) => (
-                <div key={weekIdx} className={`flex-col gap-1 ${weekIdx < 27 ? 'hidden md:flex' : 'flex'}`}>
-                  {week.map((day) => (
-                    <button type="button" key={day.date} className={`h-3 w-3 rounded-sm ${getColor(day.minutes)} transition-all hover:ring-2 hover:ring-[#16a34a] focus-visible:outline-2 focus-visible:outline-[#15803d]`} aria-label={`${day.date}: ${day.minutes} minutes logged`} title={`${day.date}: ${day.minutes} minutes`} />
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Legend */}
-          <div className="mt-6 flex items-center gap-3">
-            <span className="text-xs text-gray-600 font-medium">Less</span>
-            <div className="flex gap-1">
-              {['bg-[#ebedf0]', 'bg-[#bbf7d0]', 'bg-[#86efac]', 'bg-[#22c55e]', 'bg-[#15803d]'].map((color, i) => (
-                <div key={i} className={`w-3 h-3 rounded-sm ${color}`} />
-              ))}
-            </div>
-            <span className="text-xs text-gray-600 font-medium">More</span>
-          </div>
-
-          {/* Helper Text */}
-          </div>
-          <p className="mt-3 text-xs text-gray-500">
-            Hover or focus any square to see that day&apos;s entries. Darker green means more logged.
-          </p>
+          <span className="text-xs font-medium text-gray-600">More</span>
         </div>
+
+        {/* Helper Text */}
+        <p className="mt-3 text-xs text-gray-500">
+          Hover or focus any square to see that day&apos;s entries. Darker green means more logged.
+        </p>
       </div>
     </section>
   );
